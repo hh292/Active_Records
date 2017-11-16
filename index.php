@@ -1,7 +1,6 @@
 <?php
 
 //turn on debugging messages
-
 ini_set('display_errors', 'On');
 error_reporting(E_ALL);
 
@@ -9,6 +8,7 @@ define('DATABASE', 'hh292');
 define('USERNAME', 'hh292');
 define('PASSWORD', 'ic2BQ414k');
 define('CONNECTION', 'sql1.njit.edu');
+
 
 class dbConn{
     //variable to hold connection object.
@@ -37,8 +37,8 @@ class dbConn{
     }
 }
 class collection {
-    
-    protected $html;
+
+protected $html;
 
     static public function create() {
       $model = new static::$modelName;
@@ -66,56 +66,94 @@ class collection {
         $recordsSet =  $statement->fetchAll();
         return $recordsSet;
     }
-
-        }
 }
-
 class accounts extends collection {
     protected static $modelName = 'account';
 }
-
 class todos extends collection {
     protected static $modelName = 'todo';
 }
 
 
 class model {
-    protected $tableName;
-    public function save()
+//-----------------
+
+protected $tableName;
+
+public function save()
+    
     {
-        if ($this->id = '') {
-            $sql = $this->insert();
+        if ($this->id != '') {
+            $sql = $this->update($this->id);
         } else {
-            $sql = $this->update();
+           $sql = $this->insert();
         }
-
-        echo $tableName;
-
         $db = dbConn::getConnection();
         $statement = $db->prepare($sql);
-        $statement->execute();
-        $tableName = get_called_class();
         $array = get_object_vars($this);
-        $columnString = implode(',', $array);
-        $valueString = ":".implode(',:', $array);
-        echo "INSERT INTO $tableName (" . $columnString . ") VALUES (" . $valueString . ") </br>";
-        echo 'I just saved record: ' . $this->id;
+        foreach (array_flip($array) as $key=>$value){
+            $statement->bindParam(":$value", $this->$value);
+        }
+        $statement->execute();
     }
+
     private function insert() {
-        $sql = 'INSERT';
+        $modelName=get_called_class();
+        $tableName = $modelName::getTablename();
+        $array = get_object_vars($this);
+        $columnString = implode(',', array_flip($array));
+        $valueString = ':'.implode(',:', array_flip($array));
+        $sql =  'INSERT INTO '.$tableName.' ('.$columnString.') VALUES ('.$valueString.')';
         return $sql;
     }
-    private function update() {
-        $sql = 'sometthing';
+
+    private function update($id) {
+        $modelName=get_called_class();
+        $tableName = $modelName::getTablename();
+        $array = get_object_vars($this);
+        $comma = " ";
+        $sql = 'UPDATE '.$tableName.' SET ';
+        foreach ($array as $key=>$value){
+            if( ! empty($value)) {
+                $sql .= $comma . $key . ' = "'. $value .'"';
+                $comma = ", ";
+            }
+        }
+        $sql .= ' WHERE id='.$id;
         return $sql;
-        echo 'I just updated record' . $this->id;
     }
-    public function delete() {
-        echo 'I just deleted record' . $this->id;
+
+    public function delete($id) {
+        $db = dbConn::getConnection();
+        $modelName=get_called_class();
+        $tableName = $modelName::getTablename();
+        $sql = 'DELETE FROM '.$tableName.' WHERE id='.$id;
+        $statement = $db->prepare($sql);
+        $statement->execute();
     }
 }
+
+
+    
+//---------------------------
+
 class account extends model {
+    public $id;
+    public $email;
+    public $fname;
+    public $lname;
+    public $phone;
+    public $birthday;
+    public $gender;
+    public $password;
+    public static function getTablename(){
+        $tableName='accounts';
+        return $tableName;
+    }
 }
+
+//-----------------------------------
+
 class todo extends model {
     public $id;
     public $owneremail;
@@ -124,18 +162,17 @@ class todo extends model {
     public $duedate;
     public $message;
     public $isdone;
-    public function __construct()
-    {
-        $this->tableName = 'todos';
-    
+    public static function getTablename(){
+        $tableName='todos';
+        return $tableName;
     }
 }
 // this would be the method to put in the index page for accounts
-$records = todos::findAll();
-//print_r($records);
-// to print all accounts records in html table  
-$html = '<table border = 6><tbody>';
 
+//-------------------------- Find All -------
+$records = accounts::findAll();
+ // to print all accounts records in html table  
+  $html = '<table border = 6><tbody>';
   // Displaying Header Row ...... hh292
   
   $html .= '<tr>';
@@ -145,7 +182,6 @@ $html = '<table border = 6><tbody>';
         }
        
     $html .= '</tr>';
-
     // Displayng Data Rows .......hh292
     
     //$i = 0;
@@ -161,38 +197,25 @@ $html = '<table border = 6><tbody>';
       
       //$i++;
     }
-
     $html .= '</tbody></table>';
     print_r($html);
 
-echo"<br>";
+//--------------------------- Find Unique -----------
 
-//------------------------------------------------------
-// this would be the method to put in the index page for todos
-$records = todos::findAll();
-//print_r($records);
-//this code is used to get one record and is used for showing one record or updating one record
-
-//------------------------------------------------------
-
-
-// to retrive the selected data 
 $record = todos::findOne(4);
-//print_r($records);
-print_r("Todo table id - 4");
+ // Displaying Header Row ...... hh292
 
-//.$html = '<table border = 6><tbody>';
-
-  // Displaying Header Row ...... hh292
+  print_r("Todo table id - 4");
   
+  $html = '<table border = 6><tbody>';
   $html .= '<tr>';
-    foreach($record[0] as $key=>$value)
+    
+    foreach($record[0]as $key=>$value)
         {
             $html .= '<th>' . htmlspecialchars($key) . '</th>';
         }
        
     $html .= '</tr>';
-
     // Displayng Data Rows .......hh292
     
     //$i = 0;
@@ -209,26 +232,67 @@ print_r("Todo table id - 4");
       
       //$i++;
     }
-
     $html .= '</tbody></table>';
     
     print_r($html);
 
-//----------------------------------------------------------
-//[1] => todo Object ( [id] => 2 [owneremail] => mjlee@njit.edu [ownerid] => 1 [createddate] => 2017-05-03 00:00:00 [duedate] => 2017-05-27 00:00:00 [message] => new name 2 [isdone] => 0 [tableName:protected] => todos )
+//-------------------------- Insert ----------
 
-$columns = array('id'=> ' ','owneremail'=> 'hh292@njit.edu', 'ownerid'=> '123', 'createddate'=> '2017-06-07 00:01:00', 'duedate'=>'2017-07-10 00:03:00', 'message'=>'Th', 'isdone' => '0');
+    //$form .= '<h2>Insert One Record</h2>';
+    echo "<h2>Insert One Record</h2>";
+//insert a new record
+$record = new account();
+$record->email="testnjit.edu";
+$record->fname="hh";
+$record->lname="hhhh";
+$record->phone="66697";
+$record->birthday="00-00-0000";
+$record->gender="male";
+$record->password="12345";
+$record->save();
+$records = accounts::findAll();
+//$tableGen = htmlTable::genarateTableFromMultiArray($records);
+$html = '<table border = 6><tbody>';
+  // Displaying Header Row ...... hh292
+  
+  $html .= '<tr>';
+    foreach($records[0] as $key=>$value)
+        {
+            $html .= '<th>' . htmlspecialchars($key) . '</th>';
+        }
+       
+    $html .= '</tr>';
+    // Displayng Data Rows .......hh292
+    
+    //$i = 0;
+    foreach($records as $key=>$value)
+    {
+        $html .= '<tr>';
+        
+        foreach($value as $key2=>$value2)
+        {
+            $html .= '<td>' . htmlspecialchars($value2) . '<br></td>';
+        }
+        $html .= '</tr>';
+      
+      //$i++;
+    }
+    $html .= '</tbody></table>';
+    print_r($html);
+echo "<h3>After Inserting</h3>";
+//$form .= $tableGen;
 
-print_r($columns);
-$r = todos::insertRecord($columns);
 
+
+//-------------------------    
+
+//print_r($record);
 //this is used to save the record or update it (if you know how to make update work and insert)
 // $record->save();
 //$record = accounts::findOne(1);
 //This is how you would save a new todo item
 $record = new todo();
-
-$record->message = 'some taskjhgyg';
+$record->message = 'some task';
 $record->isdone = 0;
 //$record->save();
 //print_r($record);
