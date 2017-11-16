@@ -168,6 +168,7 @@ class todo extends model {
         return $tableName;
     }
 }
+
 //--------------- Accounts Table-------------------------hh292
 
 //-------------------------- Find All -------------------hh292
@@ -239,7 +240,7 @@ $record = accounts::findOne(4);
 
 //-------------------------- Insert Record---------------------hh292
 
-echo "<h2>Insert One Record</h2>";
+/* echo "<h2>Insert One Record</h2>";
 $record = new account();
 $record->email="testnjit.edu";
 $record->fname="hh";
@@ -279,13 +280,13 @@ $html = '<table border = 6><tbody>';
     $html .= '</tbody></table>';
 
 echo "<h3>After Inserting</h3>";
-print_r($html);
+print_r($html);*/
 
 //------------------------- Delete Record -------------------hh292
 
 echo "<h2>Delete One Record</h2>";
 $record= new account();
-$id=27;
+$id=28;
 $record->delete($id);
 echo '<h3>Record with id: '.$id.' is deleted</h3>';
 //'<h3>After Delete</h3>';
@@ -371,15 +372,119 @@ $html = '<table border = 6><tbody>';
 
 //------------------End Of Account Table -----------------------hh292
 
+//--------------- Todo Table-------------------------hh292
+
+ $records = todos::findAll();
+
+ echo "--------------- Todo Table-----------------------<br><br>";
+ // to print all accounts records in html table  
+  $html = '<table border = 6><tbody>';
+  // Displaying Header Row ...... hh292
+  
+  $html .= '<tr>';
+    foreach($records[0] as $key=>$value)
+        {
+            $html .= '<th>' . htmlspecialchars($key) . '</th>';
+        }
+       
+    $html .= '</tr>';
+    // Displayng Data Rows .......hh292
+    
+    //$i = 0;
+    foreach($records as $key=>$value)
+    {
+        $html .= '<tr>';
+        
+        foreach($value as $key2=>$value2)
+        {
+            $html .= '<td>' . htmlspecialchars($value2) . '<br></td>';
+        }
+        $html .= '</tr>';
+      
+      //$i++;
+    }
+    $html .= '</tbody></table>';
+    echo "Todo table";
+    print_r($html);
+
+//------------------Find Unique id-------------------hh292
+
+ $record = todos::findOne(3);
+ // Displaying Header Row ...... hh292
+
+  print_r("Todo table id - 3");
+  
+  $html = '<table border = 6><tbody>';
+  $html .= '<tr>';
+    
+    foreach($record[0]as $key=>$value)
+        {
+            $html .= '<th>' . htmlspecialchars($key) . '</th>';
+        }
+       
+    $html .= '</tr>';
+    // Displayng Data Rows .......hh292
+    
+    //$i = 0;
+    
+    foreach($record as $key=>$value)
+    {
+       $html .= '<tr>';
+        
+       foreach($value as $key2=>$value2)
+        {
+            $html .= '<td>' . htmlspecialchars($value2) . '<br></td>';
+        }
+        $html .= '</tr>';
+      
+      //$i++;
+    }
+    $html .= '</tbody></table>';
+    
+    print_r($html);
+
+//-------------------------Insert Record-----------------hh292
+
+   echo "<h2>Insert One Record</h2>";
+        $record = new todo();
+        $record->owneremail="hh292@njit.edu";
+        $record->ownerid=06;
+        $record->createddate="11-05-2017";
+        $record->duedate="11-13-2017";
+        $record->message="Active record Assignment";
+        $record->isdone=1;
+        $record->save();
+        $records = todos::findAll();
+        echo"<h3>After Inserting</h3>";
  
-//this is used to save the record or update it (if you know how to make update work and insert)
-// $record->save();
-//$record = accounts::findOne(1);
-//This is how you would save a new todo item
-$record = new todo();
-$record->message = 'some task';
-$record->isdone = 0;
-//$record->save();
-//print_r($record);
-$record = todos::create();
-//print_r($record);
+     $html = '<table border = 6><tbody>';
+  // Displaying Header Row ...... hh292
+  
+      $html .= '<tr>';
+      foreach($records[0] as $key=>$value)
+         {
+            $html .= '<th>' . htmlspecialchars($key) . '</th>';
+        }
+       
+    $html .= '</tr>';
+    // Displayng Data Rows .......hh292
+    
+    //$i = 0;
+    foreach($records as $key=>$value)
+    {
+        $html .= '<tr>';
+        
+        foreach($value as $key2=>$value2)
+        {
+            $html .= '<td>' . htmlspecialchars($value2) . '<br></td>';
+        }
+        $html .= '</tr>';
+      
+      //$i++;
+    }
+    $html .= '</tbody></table>';
+
+//echo "<h3>After Inserting</h3>";
+print_r($html);
+
+//------------------------Update Record--------------------hh292
