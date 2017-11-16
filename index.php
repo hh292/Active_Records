@@ -326,11 +326,52 @@ echo "<h3>After Deleteing</h3>";
 
 print_r($html);
 
-//---------------------------------------------------------------
+//-----------------------------Update Record-------------------hh292
 
+echo "<h2>Update One Record</h2>";
+$id=30;
+$record = new account();
+$record->id=$id;
+$record->fname="fname_Update";
+$record->lname="lname_Update";
+$record->gender="gender_Update";
+$record->save();
+$record = accounts::findAll();
+echo "<h3>Record update with id: ".$id."</h3>";
+        
+$html = '<table border = 6><tbody>';
+  // Displaying Header Row ...... hh292
+  
+  $html .= '<tr>';
+    
+    foreach($record[0] as $key=>$value)
+        {
+            $html .= '<th>' . htmlspecialchars($key) . '</th>';
+        }
+       
+    $html .= '</tr>';
+    // Displayng Data Rows .......hh292
+    
+    //$i = 0;
+    foreach($record as $key=>$value)
+    {
+        $html .= '<tr>';
+        
+        foreach($value as $key2=>$value2)
+        {
+            $html .= '<td>' . htmlspecialchars($value2) . '<br></td>';
+        }
+        $html .= '</tr>';
+      
+      //$i++;
+    }
+    $html .= '</tbody></table>';
+ 
+ print_r($html);
 
+//------------------End Of Account Table -----------------------hh292
 
-//print_r($record);
+ 
 //this is used to save the record or update it (if you know how to make update work and insert)
 // $record->save();
 //$record = accounts::findOne(1);
