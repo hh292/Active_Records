@@ -168,9 +168,9 @@ class todo extends model {
         return $tableName;
     }
 }
-// this would be the method to put in the index page for accounts
+//--------------- Accounts Table-------------------------hh292
 
-//-------------------------- Find All -------
+//-------------------------- Find All -------------------hh292
 $records = accounts::findAll();
  // to print all accounts records in html table  
   $html = '<table border = 6><tbody>';
@@ -201,9 +201,9 @@ $records = accounts::findAll();
     $html .= '</tbody></table>';
     print_r($html);
 
-//--------------------------- Find Unique -----------
+//--------------------------- Find Unique Record---------------hh292
 
-$record = todos::findOne(4);
+$record = accounts::findOne(4);
  // Displaying Header Row ...... hh292
 
   print_r("Todo table id - 4");
@@ -237,11 +237,9 @@ $record = todos::findOne(4);
     
     print_r($html);
 
-//-------------------------- Insert ----------
+//-------------------------- Insert Record---------------------hh292
 
-    //$form .= '<h2>Insert One Record</h2>';
-    echo "<h2>Insert One Record</h2>";
-//insert a new record
+echo "<h2>Insert One Record</h2>";
 $record = new account();
 $record->email="testnjit.edu";
 $record->fname="hh";
@@ -283,10 +281,53 @@ $html = '<table border = 6><tbody>';
 echo "<h3>After Inserting</h3>";
 print_r($html);
 
+//------------------------- Delete Record -------------------hh292
+
+echo "<h2>Delete One Record</h2>";
+$record= new account();
+$id=27;
+$record->delete($id);
+echo '<h3>Record with id: '.$id.' is deleted</h3>';
+//'<h3>After Delete</h3>';
+$record = accounts::findAll();
+
+//print_r($records);
+
+$html = '<table border = 6><tbody>';
+  // Displaying Header Row ...... hh292
+  
+  $html .= '<tr>';
+    
+    foreach($record[0] as $key=>$value)
+        {
+            $html .= '<th>' . htmlspecialchars($key) . '</th>';
+        }
+       
+    $html .= '</tr>';
+    // Displayng Data Rows .......hh292
+    
+    //$i = 0;
+    foreach($record as $key=>$value)
+    {
+        $html .= '<tr>';
+        
+        foreach($value as $key2=>$value2)
+        {
+            $html .= '<td>' . htmlspecialchars($value2) . '<br></td>';
+        }
+        $html .= '</tr>';
+      
+      //$i++;
+    }
+    $html .= '</tbody></table>';
 
 
+echo "<h3>After Deleteing</h3>";
+print_r($html);
 
-//-------------------------    
+//---------------------------------------------------------------
+
+
 
 //print_r($record);
 //this is used to save the record or update it (if you know how to make update work and insert)
