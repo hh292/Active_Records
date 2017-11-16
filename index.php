@@ -103,6 +103,7 @@ public function save()
         $array = get_object_vars($this);
         $columnString = implode(',', array_flip($array));
         $valueString = ':'.implode(',:', array_flip($array));
+        print_r($columnString);
         $sql =  'INSERT INTO '.$tableName.' ('.$columnString.') VALUES ('.$valueString.')';
         return $sql;
     }
@@ -251,7 +252,7 @@ $record->gender="male";
 $record->password="12345";
 $record->save();
 $records = accounts::findAll();
-//$tableGen = htmlTable::genarateTableFromMultiArray($records);
+
 $html = '<table border = 6><tbody>';
   // Displaying Header Row ...... hh292
   
@@ -278,8 +279,9 @@ $html = '<table border = 6><tbody>';
       //$i++;
     }
     $html .= '</tbody></table>';
-    print_r($html);
+
 echo "<h3>After Inserting</h3>";
+print_r($html);
 //$form .= $tableGen;
 
 
