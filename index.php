@@ -282,7 +282,7 @@ $html = '<table border = 6><tbody>';
 
 echo "<h3>After Inserting</h3>";
 print_r($html);
-//$form .= $tableGen;
+
 
 
 
