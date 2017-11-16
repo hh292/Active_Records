@@ -323,6 +323,7 @@ $html = '<table border = 6><tbody>';
 
 
 echo "<h3>After Deleteing</h3>";
+
 print_r($html);
 
 //---------------------------------------------------------------
