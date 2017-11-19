@@ -18,7 +18,7 @@ spl_autoload_register(array('Manage', 'autoload'));
 
 
 $obj=new displayHtml;
-
+//$obj=new model;
 $obj=new main();
 
 class dbConn{
@@ -90,6 +90,8 @@ class todos extends collection {
     protected static $modelName = 'todo';
 }
 
+
+
 abstract class model {
 //-----------------
 protected $tableName;
@@ -114,7 +116,7 @@ public function save()
     }
     private function insert() {
 
-        //$modelName=static::$modelName;
+        
         $modelName=get_called_class();
         $tableName = $modelName::getTablename();
         $array = get_object_vars($this);
@@ -126,7 +128,7 @@ public function save()
     }
     private function update() {
 
-        //$modelName=static::$modelName;
+        
         $modelName=get_called_class();
         $tableName = $modelName::getTablename();
         $array = get_object_vars($this);
@@ -159,6 +161,7 @@ echo"In delete";
         $statement->execute();
     }
 }
+
     
 //---------------------------
 class account extends model {
@@ -188,7 +191,7 @@ class todo extends model {
         $tableName='todos';
         return $tableName;
     }
-}
+} 
 
 
 
@@ -202,47 +205,18 @@ class main
 
      //-------------------------- Find All -------------------hh292
      $records = accounts::findAll();
-    
-    // to print all accounts records in html table  
-     $html = displayHtml::tableDisplayFunction($records);
-     print_r($html);
+         // Display Function : Html Table display
 
+     $html = displayHtml::tableDisplayFunction($records);
+     
+     print_r($html);
 
 //--------------------------- Find Unique Record---------------hh292
 
 $records = accounts::findOne(4);
- // Displaying Header Row ...... hh292
+$html = displayHtml::tableDisplayFunction_1($records);
 print_r("Todo table id - 4");
-  
-$html = '<table border = 6><tbody>';
-  $html .= '<tr>';
-    
-    foreach($records as $key=>$value)
-        {
-            $html .= '<th>' . htmlspecialchars($key) . '</th>';
-        }
-       
-    $html .= '</tr>';
-    // Displayng Data Rows .......hh292
-    
-    //$i = 0;
-    
-    foreach($records as $key=>$value)
-    {
-       $html .= '<tr>';
-        
-       foreach($value as $key2=>$value2)
-        {
-            $html .= '<td>' . htmlspecialchars($value2) . '<br></td>';
-        }
-        $html .= '</tr>';
-      
-      //$i++;
-    }
-    $html .= '</tbody></table>';
-    
-    print_r($html);
-
+print_r($html);
 
 //-------------------------- Insert Record---------------------hh292
 echo "<h2>Insert One Record</h2>";
@@ -261,10 +235,8 @@ $html = displayHtml::tableDisplayFunction($records);
 echo "After inserting";
 print_r($html);
 
-//print_r($html);
-
-
 //-----------------------------Update Record-------------------hh292
+
 echo "<h2>Update Record</h2>";
 echo "Updating the ";
 //$id=30;
@@ -300,45 +272,20 @@ echo "<h3>After Deleteing</h3>";
 print_r($html);
 
 //------------------End Of Account Table -----------------------hh292
+
 //--------------- Todo Table-------------------------hh292
+
  $records = todos::findAll();
  echo "--------------- Todo Table-----------------------<br><br>";
- // to print all accounts records in html table 
  $html = displayHtml::tableDisplayFunction($records); 
  print_r($html);
+
 //------------------Find Unique id-------------------hh292
- $record = todos::findOne(3);
- // Displaying Header Row ...... hh292
- print_r("Todo table id - 3");
-  
-$html = '<table border = 6><tbody>';
-  $html .= '<tr>';
-    
-    foreach($records[0]as $key=>$value)
-        {
-            $html .= '<th>' . htmlspecialchars($key) . '</th>';
-        }
-       
-    $html .= '</tr>';
-    // Displayng Data Rows .......hh292
-    
-    //$i = 0;
-    
-    foreach($records as $key=>$value)
-    {
-       $html .= '<tr>';
-        
-       foreach($value as $key2=>$value2)
-        {
-            $html .= '<td>' . htmlspecialchars($value2) . '<br></td>';
-        }
-        $html .= '</tr>';
-      
-      //$i++;
-    }
-    $html .= '</tbody></table>';
-    
-    print_r($html);
+$records = todos::findOne(4);
+$html = displayHtml::tableDisplayFunction_1($records);
+print_r("Todo table id - 4");
+print_r($html);
+
 //-------------------------Insert Record-----------------hh292
    echo "<h2>Insert One Record</h2>";
         $record = new todo();
@@ -355,10 +302,10 @@ $html = '<table border = 6><tbody>';
     $html = displayHtml::tableDisplayFunction($records);
 //echo "<h3>After Inserting</h3>";
 print_r($html);
-//------------------------Update Record--------------------hh292 */
+
+//------------------------Update Record--------------------hh292 
 
 echo "<h2>Update Record</h2>";
-echo "Updating the ";
 //$id=30;
 $records = todos::findOne($lastInsertedId);
 $record = new todo();
@@ -374,7 +321,23 @@ $html = displayHtml::tableDisplayFunction($records);
  
 print_r($html);
 
+// ------------------------Delete Record ------------------hh292
 
+echo "<h2>Delete One Record</h2>";
+print_r($lastInsertedId);
+$records = todos::findOne($lastInsertedId);
+$record= new todo();
+$record->id=$records->id;
+echo "<br>";
+//print_r($records);
+$records->delete();
+echo '<h3>Record with id: '.$records->id.' is deleted</h3>';
+echo "After Delete";
+$records = todos::findAll();
+
+$html = displayHtml::tableDisplayFunction($records);
+echo "<h3>After Deleteing</h3>";
+print_r($html);
 
 }
 }
