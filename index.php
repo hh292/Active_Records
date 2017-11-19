@@ -231,6 +231,7 @@ class main
     $record->password="123@#45hn";
     $lstId=$record->save();
     $records = accounts::findAll();
+    //print_r($lstId);
     $form .="<h3>Record inserted with id - <i>".$lstId."</i></h3>";
     $html = displayHtml::tableDisplayFunction($records);
     $form .='<h3>After inserting the record - </h3>';
