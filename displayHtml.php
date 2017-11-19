@@ -5,8 +5,7 @@ class displayHtml{
 
     $html = '<table border = 6><tbody>';
   // Displaying Header Row ...... hh292
-  
-  $html .= '<tr>';
+   $html .= '<tr>';
     foreach($records[0] as $key=>$value)
         {
             $html .= '<th>' . htmlspecialchars($key) . '</th>';
@@ -14,7 +13,6 @@ class displayHtml{
        
     $html .= '</tr>';
     // Displayng Data Rows .......hh292
-    
     //$i = 0;
     foreach($records as $key=>$value)
     {
@@ -33,9 +31,7 @@ class displayHtml{
     return $html;
 }     
 
-
 public static function tableDisplayFunction_1($records){
-
 $html = '<table border = 6><tbody>';
     
     $html .= '<tr>';
