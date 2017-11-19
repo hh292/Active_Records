@@ -115,7 +115,6 @@ public function save()
         $statement->execute();
         $id = $db->lastInsertId();
         return $id;
-
     }
 private function insert() 
     {      
@@ -130,31 +129,32 @@ private function insert()
     }
 private function update() 
     {  
-        $modelName=get_called_class();
-        $tableName = $modelName::getTablename();
-        $array = get_object_vars($this);
-        $comma = " ";
-        $sql = 'UPDATE '.$tableName.' SET ';
-        foreach ($array as $key=>$value){
-            if( ! empty($value)) {
-                $sql .= $comma . $key . ' = "'. $value .'"';
-                $comma = ", ";
+    $modelName=get_called_class();
+    $tableName = $modelName::getTablename();
+    $array = get_object_vars($this);
+    $comma = " ";
+    $sql = 'UPDATE '.$tableName.' SET ';
+    foreach ($array as $key=>$value)
+    {
+        if( ! empty($value)) {
+            $sql .= $comma . $key . ' = "'. $value .'"';
+            $comma = ", ";
             }
         }
         $sql .= ' WHERE id='.$this->id;
-        return $sql;
+    return $sql;
     }
     
 public function delete() 
     {
-        //echo"In delete";
-        $db = dbConn::getConnection();
-        $modelName=get_called_class();
-        $tableName = $modelName::getTablename();
-        $sql = 'DELETE FROM '.$tableName.' WHERE id ='.$this->id;
-        $statement = $db->prepare($sql);
-        //print_r($sql);
-        $statement->execute();
+    //echo"In delete";
+    $db = dbConn::getConnection();
+    $modelName=get_called_class();
+    $tableName = $modelName::getTablename();
+    $sql = 'DELETE FROM '.$tableName.' WHERE id ='.$this->id;
+    $statement = $db->prepare($sql);
+    //print_r($sql);
+    $statement->execute();
     }
 }
 
@@ -196,7 +196,6 @@ class todo extends model {
 
 class main
 {
-
    public function __construct()
    {
 
@@ -305,7 +304,7 @@ class main
     $form .='<h3>After inserting the record - </h3>';
     $form .='<center>'.$html.'</center><hr>';
 
-//------------------------4) Update Record--------------------hh292 
+//------------------------4) Update Record in todo Table--------------------hh292 
     $form .="<h2> D) Update Record</h2>";
     //$id=41;
     $records = todos::findOne($lstId);
@@ -319,7 +318,7 @@ class main
     $html = displayHtml::tableDisplayFunction($records);
     $form .='<center>'.$html.'</center><hr>';
 
-// -----------------------5) Delete Record ------------------hh292
+// -----------------------5) Delete Record in todo Table------------------hh292
     $form .= "<h2> E) Delete One Record</h2>";
     //print_r($lstId);
     $records = todos::findOne($lstId);
