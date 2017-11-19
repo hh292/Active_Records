@@ -1,7 +1,8 @@
 <?php
-//turn on debugging messages
-ini_set('display_errors', 'On');
-error_reporting(E_ALL);
+/* **********************************WSD Active Record Assignment"********************************
+***********************************Created By: Himanshu Hunge UCID: hh292 *********************************** 
+********************************** New Jersey Institute Of Technology ************************************** */
+
 define('DATABASE', 'hh292');
 define('USERNAME', 'hh292');
 define('PASSWORD', 'ic2BQ414k');
@@ -18,7 +19,6 @@ spl_autoload_register(array('Manage', 'autoload'));
 
 
 $obj=new displayHtml;
-//$obj=new model;
 $obj=new main();
 
 class dbConn{
@@ -48,6 +48,9 @@ class dbConn{
         return self::$db;
     }
 }
+
+// ---------------------abstract class for collection ------------------hh292
+
 abstract class collection {
 
 protected $html;
@@ -91,12 +94,12 @@ class todos extends collection {
 }
 
 
-
+//-------------------abstract class for model--------------hh292 
 abstract class model {
-//-----------------
+
 protected $tableName;
+
 public function save()
-    
     {
         if ($this->id != '') {
             $sql = $this->update();
@@ -114,9 +117,8 @@ public function save()
         return $id;
 
     }
-    private function insert() {
-
-        
+private function insert() 
+    {      
         $modelName=get_called_class();
         $tableName = $modelName::getTablename();
         $array = get_object_vars($this);
@@ -126,9 +128,8 @@ public function save()
         $sql =  'INSERT INTO '.$tableName.' ('.$columnString.') VALUES ('.$valueString.')';
         return $sql;
     }
-    private function update() {
-
-        
+private function update() 
+    {  
         $modelName=get_called_class();
         $tableName = $modelName::getTablename();
         $array = get_object_vars($this);
@@ -144,18 +145,13 @@ public function save()
         return $sql;
     }
     
-    public function delete() {
-
-echo"In delete";
+public function delete() 
+    {
+        //echo"In delete";
         $db = dbConn::getConnection();
         $modelName=get_called_class();
-       // $modelName=static::$modelName;
-
         $tableName = $modelName::getTablename();
-
-
         $sql = 'DELETE FROM '.$tableName.' WHERE id ='.$this->id;
-        //print_r($id);  //print_r($this.id)
         $statement = $db->prepare($sql);
         //print_r($sql);
         $statement->execute();
@@ -163,7 +159,8 @@ echo"In delete";
 }
 
     
-//---------------------------
+//--------------------------- Account extends Model class -------hh292
+
 class account extends model {
     public $id;
     public $email;
@@ -178,7 +175,9 @@ class account extends model {
         return $tableName;
     }
 }
-//-----------------------------------
+
+//------------------------------todo extends Model class --------hh292
+
 class todo extends model {
     public $id;
     public $owneremail;
@@ -193,151 +192,150 @@ class todo extends model {
     }
 } 
 
-
+//----------------------------- Main Class ---------------------hh292
 
 class main
 {
 
    public function __construct()
-  {
-     
-     //--------------- Accounts Table-------------------------hh292
+   {
 
-     //-------------------------- Find All -------------------hh292
-     $records = accounts::findAll();
-         // Display Function : Html Table display
+//--------------------------- Accounts Table-------------------------hh292
 
-     $html = displayHtml::tableDisplayFunction($records);
-     
-     print_r($html);
-
-//--------------------------- Find Unique Record---------------hh292
-
-$records = accounts::findOne(4);
-$html = displayHtml::tableDisplayFunction_1($records);
-print_r("Todo table id - 4");
-print_r($html);
-
-//-------------------------- Insert Record---------------------hh292
-echo "<h2>Insert One Record</h2>";
-$record = new account();
-$record->email="testnjit.edu";
-$record->fname="hh";
-$record->lname="hhhh";
-$record->phone="66697";
-$record->birthday="00-00-0000";
-$record->gender="male";
-$record->password="12345";
-$lastInsertedId=$record->save();
-$records = accounts::findAll();
-
-$html = displayHtml::tableDisplayFunction($records);
-echo "After inserting";
-print_r($html);
-
-//-----------------------------Update Record-------------------hh292
-
-echo "<h2>Update Record</h2>";
-echo "Updating the ";
-//$id=30;
-$records = accounts::findOne($lastInsertedId);
-$record = new account();
-$record->id=$records->id;
-$record->fname="fname_Update";
-$record->lname="lname_Update";
-$record->gender="gender_Update";
-$record->save();
-$records = accounts::findAll();
-echo "<h3>Record update with id: ".$records->id."</h3>";
-        
-$html = displayHtml::tableDisplayFunction($records);
- 
-print_r($html);
-
-//------------------------- Delete Record -------------------hh292
-echo "<h2>Delete One Record</h2>";
-print_r($lastInsertedId);
-$records = accounts::findOne($lastInsertedId);
-$record= new account();
-$record->id=$records->id;
-echo "<br>";
-//print_r($records);
-$records->delete();
-echo '<h3>Record with id: '.$records->id.' is deleted</h3>';
-echo "After Delete";
-$records = accounts::findAll();
-
-$html = displayHtml::tableDisplayFunction($records);
-echo "<h3>After Deleteing</h3>";
-print_r($html);
-
-//------------------End Of Account Table -----------------------hh292
-
-//--------------- Todo Table-------------------------hh292
-
- $records = todos::findAll();
- echo "--------------- Todo Table-----------------------<br><br>";
- $html = displayHtml::tableDisplayFunction($records); 
- print_r($html);
-
-//------------------Find Unique id-------------------hh292
-$records = todos::findOne(4);
-$html = displayHtml::tableDisplayFunction_1($records);
-print_r("Todo table id - 4");
-print_r($html);
-
-//-------------------------Insert Record-----------------hh292
-   echo "<h2>Insert One Record</h2>";
-        $record = new todo();
-        $record->owneremail="hh292@njit.edu";
-        $record->ownerid=06;
-        $record->createddate="11-05-2017";
-        $record->duedate="11-13-2017";
-        $record->message="Active record Assignment";
-        $record->isdone=1;
-        $lastInsertedId=$record->save();
-        $records = todos::findAll();
-        echo"<h3>After Inserting</h3>";
- 
+//--------------------------1) Find All records-------------------hh292
+    $form = '<form method="post" enctype="multipart/form-data">';
+    $form .='<h1><center>*********Active Records Assignment********</center></h1>';
+    $form .='<center>Copyright @ Himanshu Hunge ; Ucid: hh292</center>';
+    $form .= '<h1> 1)Accounts Table</h2>';
+    $form .= '<h2> A) All records in Accounts Table</h2>';
+    $records = accounts::findAll();
     $html = displayHtml::tableDisplayFunction($records);
-//echo "<h3>After Inserting</h3>";
-print_r($html);
+    $form .='<center>'.$html.'</center><hr>'; 
 
-//------------------------Update Record--------------------hh292 
+//--------------------------2) Find Unique Record---------------hh292
+    $id = 4;
+    $records = accounts::findOne($id);
+    $html = displayHtml::tableDisplayFunction_1($records);
+    $form .= '<h2> B) Select One Record </h2>';
+    $form .="<h3>Record fetched with id - <i>".$id."</i></h3>";
+    $form .= '<center>'.$html.'</center><hr>';
 
-echo "<h2>Update Record</h2>";
-//$id=30;
-$records = todos::findOne($lastInsertedId);
-$record = new todo();
-$record->id=$records->id;
-$record->owneremail="updatetest@njit.edu";
-$record->message="Update Active ";
-$record->save();
+//--------------------------3) Insert Record---------------------hh292
+    $form .="<h2> C)Insert One Record</h2>";
+    $record = new account();
+    $record->email="test@njit.edu";
+    $record->fname="hh";
+    $record->lname="hhhh";
+    $record->phone="66697";
+    $record->birthday="06-09-1992";
+    $record->gender="male";
+    $record->password="123@#45hn";
+    $lstId=$record->save();
+    $records = accounts::findAll();
+    $form .="<h3>Record inserted with id - <i>".$lstId."</i></h3>";
+    $html = displayHtml::tableDisplayFunction($records);
+    $form .='<h3>After inserting the record - </h3>';
+    $form .='<center>'.$html.'</center><hr>';
 
-$records = todos::findAll();
-echo "<h3>Record update with id: ".$records->id."</h3>";
-        
-$html = displayHtml::tableDisplayFunction($records);
+//---------------------------4) Update Record-------------------hh292
+    $form .= "<h2> D) Update Record</h2>";
+    //$id=30;
+    $records = accounts::findOne($lstId);
+    $record = new account();
+    $record->id=$records->id;
+    $record->email="email_Update@njit.edu";
+    $record->fname="fname_Update";
+    $record->lname="lname_Update";
+    $record->gender="gender_Update";
+    $record->save();
+    $records = accounts::findAll();
+    $form .="<h3>Updateing record having id: <i>".$lstId."</i></h3>";
+    $html = displayHtml::tableDisplayFunction($records);
+    $form .='<center>'.$html.'</center><hr>';
+
+//-------------------------- 5) Delete Record -------------------hh292
+    $form .= "<h2> E) Delete One Record</h2>";
+    $records = accounts::findOne($lstId);
+    $record= new account();
+    $record->id=$records->id;
+    //print_r($records);
+    $records->delete();
+    $form .='<h3>Record with id: <i>'.$records->id.'</i> is deleted</h3>';
+    $records = accounts::findAll();
+    $html = displayHtml::tableDisplayFunction($records);
+    $form .='<h3>After Deleteing</h3>';
+    $form .='<center>'.$html.'</center><br><hr>';
+    $form .='<h2><center>******End of Accounts Table******</center></h2><hr>';
+    //print_r($form);
  
-print_r($html);
+//---------------------****End Of Account Table Functions***-----------------------hh292
 
-// ------------------------Delete Record ------------------hh292
+//---------------------**** Todo Table ****-----------------------------------------hh292
 
-echo "<h2>Delete One Record</h2>";
-print_r($lastInsertedId);
-$records = todos::findOne($lastInsertedId);
-$record= new todo();
-$record->id=$records->id;
-echo "<br>";
-//print_r($records);
-$records->delete();
-echo '<h3>Record with id: '.$records->id.' is deleted</h3>';
-echo "After Delete";
-$records = todos::findAll();
+//---------------------1) Find All Records from todo Table-------------------hh292
+    //$form .= '<br><hr></br>';
+    $form .= '<h1> 2) Todos Table</h1>';
+    $form .= '<h2> A) All records in Todos Table</h2>';
+    $records = todos::findAll();
+    $html = displayHtml::tableDisplayFunction($records); 
+    $form .='<center>'.$html.'</center><hr>';
 
-$html = displayHtml::tableDisplayFunction($records);
-echo "<h3>After Deleteing</h3>";
-print_r($html);
+//----------------------2) Find Unique Record from todo Table---------------hh292
+    $id = 7;
+    $records = todos::findOne($id);
+    $html = displayHtml::tableDisplayFunction_1($records);
+    $form .='<h2>B) Select One Record</h2>';
+    $form .='<h3> Record fetched with id: <i>'.$id.'</i></h3>';
+    $form .='<center>'.$html.'</center><hr>';
 
-}
+//--------------- --------3) Insert Record in todo Table-----------------hh292
+    $form .="<h2> C) Insert One Record</h2>";
+    $record = new todo();
+    $record->owneremail="hh292@njit.edu";
+    $record->ownerid=06;
+    $record->createddate="11-05-2017";
+    $record->duedate="11-13-2017";
+    $record->message="Active record Assignment";
+    $record->isdone=1;
+    $lstId=$record->save();
+    $records = todos::findAll();
+    //echo"<h3>After Inserting</h3>";
+    $form .="<h3>Record inserted with id - <i>".$lstId."</i></h3>";
+    $html = displayHtml::tableDisplayFunction($records);
+    $form .='<h3>After inserting the record - </h3>';
+    $form .='<center>'.$html.'</center><hr>';
+
+//------------------------4) Update Record--------------------hh292 
+    $form .="<h2> D) Update Record</h2>";
+    //$id=41;
+    $records = todos::findOne($lstId);
+    $record = new todo();
+    $record->id=$records->id;
+    $record->owneremail="updatetest@njit.edu";
+    $record->message="Update Active record ";
+    $record->save();
+    $records = todos::findAll();
+    $form .="<h3>Updateing record having id: <i>".$lstId."</i></h3>";
+    $html = displayHtml::tableDisplayFunction($records);
+    $form .='<center>'.$html.'</center><hr>';
+
+// -----------------------5) Delete Record ------------------hh292
+    $form .= "<h2> E) Delete One Record</h2>";
+    //print_r($lstId);
+    $records = todos::findOne($lstId);
+    $record= new todo();
+    $record->id=$records->id;
+    //print_r($records);
+    $records->delete();
+    $form .='<h3>Record with id: <i>'.$records->id.'</i> is deleted</h3>';
+    //echo "After Delete";
+    $records = todos::findAll();
+    $html = displayHtml::tableDisplayFunction($records);
+    $form .="<h3>After Deleteing</h3>";
+    $form .='<center>'.$html.'</center><hr>';
+    $form .='<h2><center>******End of Todos Table******</center></h2><hr>';
+    $form .='<h2><center>******End of Assignment******</center></h2><hr>';
+    $form .='</form>';
+    print_r($form);
+    }
 }
