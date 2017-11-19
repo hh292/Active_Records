@@ -33,6 +33,28 @@ class displayHtml{
 
     return $html;
 
-}     
+ }     
+
+
+public static function tableDisplayFunction_1($records){
+
+$html = '<table border = 6><tbody>';
+    
+    $html .= '<tr>';
+        
+        foreach($records as $key => $value)
+        {
+            $html .= '<th>' . htmlspecialchars($key) . '</th>';
+        }
+        $html .= '</tr>';
+        
+        foreach($records as $value){
+            $html .= '<td>' . $value . '</td>';
+        }
+        $html .= '</tr></table>';
+        return $html;
+    }
+
 }  
+
 ?>
