@@ -3,8 +3,7 @@ class displayHtml{
     
     public static function tableDisplayFunction($records){
 
-
- $html = '<table border = 6><tbody>';
+    $html = '<table border = 6><tbody>';
   // Displaying Header Row ...... hh292
   
   $html .= '<tr>';
@@ -32,8 +31,7 @@ class displayHtml{
     $html .= '</tbody></table>';
 
     return $html;
-
- }     
+}     
 
 
 public static function tableDisplayFunction_1($records){
@@ -54,7 +52,5 @@ $html = '<table border = 6><tbody>';
         $html .= '</tr></table>';
         return $html;
     }
-
 }  
-
 ?>
